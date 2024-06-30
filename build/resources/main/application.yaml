@@ -21,3 +21,12 @@ spring:
   sql:
     init:
       mode: never
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+forex:
+  api:
+    key: "c51b1ae46b8b451790cbf1c55c18894f"
+    url: "https://openexchangerates.org/api/latest.json?app_id={app_id}"
+    base: "USD"

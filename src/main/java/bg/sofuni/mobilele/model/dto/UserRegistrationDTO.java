@@ -1,4 +1,4 @@
-package bg.sofuni.mobilele.model;
+package bg.sofuni.mobilele.model.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;

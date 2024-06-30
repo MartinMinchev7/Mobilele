@@ -1,13 +1,10 @@
 package bg.sofuni.mobilele.service;
 
-import bg.sofuni.mobilele.model.UserLoginDTO;
-import bg.sofuni.mobilele.model.UserRegistrationDTO;
+import bg.sofuni.mobilele.model.dto.UserLoginDTO;
+import bg.sofuni.mobilele.model.dto.UserRegistrationDTO;
 
 public interface UserService {
 
     void registerUser(UserRegistrationDTO userRegistration);
 
-    boolean login(UserLoginDTO userLoginDTO);
-
-    void logout();
 }

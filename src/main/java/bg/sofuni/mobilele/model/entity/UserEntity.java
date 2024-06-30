@@ -2,6 +2,9 @@ package bg.sofuni.mobilele.model.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 public class UserEntity extends BaseEntity {
@@ -14,6 +17,14 @@ public class UserEntity extends BaseEntity {
     private String firstName;
 
     private String lastName;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private List<UserRoleEntity> roles = new ArrayList<>();
 
 
     public String getEmail() {
@@ -48,13 +59,22 @@ public class UserEntity extends BaseEntity {
         this.lastName = lastName;
     }
 
+    public List<UserRoleEntity> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<UserRoleEntity> roles) {
+        this.roles = roles;
+    }
+
     @Override
     public String toString() {
         return "UserEntity{" +
                 "email='" + email + '\'' +
-                ", password='" + (password != null ? "N/A" : "[PROVIDED]") + '\'' +
+                ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", roles=" + roles +
                 '}';
     }
 }

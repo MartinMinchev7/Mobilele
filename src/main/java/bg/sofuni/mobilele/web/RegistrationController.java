@@ -1,6 +1,6 @@
 package bg.sofuni.mobilele.web;
 
-import bg.sofuni.mobilele.model.UserRegistrationDTO;
+import bg.sofuni.mobilele.model.dto.UserRegistrationDTO;
 import bg.sofuni.mobilele.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

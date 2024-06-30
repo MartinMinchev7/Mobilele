@@ -1,8 +1,8 @@
 package bg.sofuni.mobilele.service;
 
-import bg.sofuni.mobilele.model.AddOfferDTO;
-import bg.sofuni.mobilele.model.OfferDetailsDTO;
-import bg.sofuni.mobilele.model.OfferSummaryDTO;
+import bg.sofuni.mobilele.model.dto.AddOfferDTO;
+import bg.sofuni.mobilele.model.dto.OfferDetailsDTO;
+import bg.sofuni.mobilele.model.dto.OfferSummaryDTO;
 
 import java.util.List;
 

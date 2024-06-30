@@ -1,6 +1,6 @@
 package bg.sofuni.mobilele.web;
 
-import bg.sofuni.mobilele.model.AddOfferDTO;
+import bg.sofuni.mobilele.model.dto.AddOfferDTO;
 import bg.sofuni.mobilele.model.enums.EngineTypeEnum;
 import bg.sofuni.mobilele.service.OfferService;
 import jakarta.validation.Valid;

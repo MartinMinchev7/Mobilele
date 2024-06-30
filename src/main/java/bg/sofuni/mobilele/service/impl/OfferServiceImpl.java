@@ -1,10 +1,11 @@
 package bg.sofuni.mobilele.service.impl;
 
-import bg.sofuni.mobilele.model.AddOfferDTO;
-import bg.sofuni.mobilele.model.OfferDetailsDTO;
-import bg.sofuni.mobilele.model.OfferSummaryDTO;
+import bg.sofuni.mobilele.model.dto.AddOfferDTO;
+import bg.sofuni.mobilele.model.dto.OfferDetailsDTO;
+import bg.sofuni.mobilele.model.dto.OfferSummaryDTO;
 import bg.sofuni.mobilele.model.entity.OfferEntity;
 import bg.sofuni.mobilele.repository.OfferRepository;
+import bg.sofuni.mobilele.service.ExRateService;
 import bg.sofuni.mobilele.service.OfferService;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +14,11 @@ import java.util.List;
 @Service
 public class OfferServiceImpl implements OfferService {
     private final OfferRepository offerRepository;
+    private final ExRateService exRateService;
 
-    public OfferServiceImpl(OfferRepository offerRepository) {
+    public OfferServiceImpl(OfferRepository offerRepository, ExRateService exRateService) {
         this.offerRepository = offerRepository;
+        this.exRateService = exRateService;
     }
 
     @Override
@@ -33,7 +36,7 @@ public class OfferServiceImpl implements OfferService {
 
         return this.offerRepository
                 .findById(id)
-                .map(OfferServiceImpl::offerDetailsDTO)
+                .map(this::offerDetailsDTO)
                 .orElseThrow();
     }
 
@@ -53,11 +56,13 @@ public class OfferServiceImpl implements OfferService {
                 offerEntity.getEngine());
     }
 
-    private static OfferDetailsDTO offerDetailsDTO(OfferEntity offerEntity) {
+    private OfferDetailsDTO offerDetailsDTO(OfferEntity offerEntity) {
         return new OfferDetailsDTO(offerEntity.getId(),
                 offerEntity.getDescription(),
                 offerEntity.getMileage(),
-                offerEntity.getEngine());
+                offerEntity.getPrice(),
+                offerEntity.getEngine(),
+                exRateService.allSupportedCurrencies());
     }
 
     private static OfferEntity map(AddOfferDTO addOfferDTO) {
@@ -66,6 +71,7 @@ public class OfferServiceImpl implements OfferService {
         offerEntity.setDescription(addOfferDTO.description());
         offerEntity.setEngine(addOfferDTO.engineType());
         offerEntity.setMileage(addOfferDTO.mileage());
+        offerEntity.setPrice(addOfferDTO.price());
 
         return offerEntity;
     }

@@ -1,4 +1,4 @@
-package bg.sofuni.mobilele.model;
+package bg.sofuni.mobilele.model.dto;
 
 import bg.sofuni.mobilele.model.enums.EngineTypeEnum;
 import jakarta.validation.constraints.NotEmpty;
@@ -14,10 +14,13 @@ public record AddOfferDTO(
         @PositiveOrZero
         Integer mileage,
         @NotNull
+        @PositiveOrZero
+        Integer price,
+        @NotNull
         EngineTypeEnum engineType
 ) {
 
     public static AddOfferDTO empty() {
-        return new AddOfferDTO(null, null, null);
+        return new AddOfferDTO(null, null, null,null);
     }
 }
