@@ -3,11 +3,14 @@ package bg.sofuni.mobilele.web;
 import bg.sofuni.mobilele.model.dto.AddOfferDTO;
 import bg.sofuni.mobilele.model.enums.EngineTypeEnum;
 import bg.sofuni.mobilele.service.OfferService;
+import bg.sofuni.mobilele.service.exception.ObjectNotFoundException;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -49,9 +52,9 @@ public class OfferController {
         }
 
 
-        long newOfferId = offerService.createOffer(addOfferDTO);
+        offerService.createOffer(addOfferDTO);
 
-        return "redirect:/offers/" + newOfferId;
+        return "redirect:/offers/all";
     }
 
     @GetMapping("/{id}")
@@ -60,6 +63,15 @@ public class OfferController {
         model.addAttribute("offerDetails", offerService.getOfferDetails(id));
 
         return "details";
+    }
+
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ObjectNotFoundException.class)
+    public ModelAndView handleObjectNotFound(ObjectNotFoundException onfe) {
+        ModelAndView modelAndView = new ModelAndView("object-not-found");
+        modelAndView.addObject("offerId", onfe.getId());
+
+        return modelAndView;
     }
 
     @DeleteMapping("/{id}")

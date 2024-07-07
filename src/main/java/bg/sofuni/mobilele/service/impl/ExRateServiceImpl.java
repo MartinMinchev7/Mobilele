@@ -5,9 +5,10 @@ import bg.sofuni.mobilele.model.dto.ExRatesDTO;
 import bg.sofuni.mobilele.model.entity.ExRateEntity;
 import bg.sofuni.mobilele.repository.ExRateRepository;
 import bg.sofuni.mobilele.service.ExRateService;
-import bg.sofuni.mobilele.service.ObjectNotFoundException;
+import bg.sofuni.mobilele.service.exception.ApiObjectNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -25,7 +26,9 @@ public class ExRateServiceImpl implements ExRateService {
     private final RestClient restClient;
     private final ForexApiConfig forexApiConfig;
 
-    public ExRateServiceImpl(ExRateRepository exRateRepository, RestClient restClient, ForexApiConfig forexApiConfig) {
+    public ExRateServiceImpl(ExRateRepository exRateRepository,
+                             @Qualifier("genericRestClient") RestClient restClient,
+                             ForexApiConfig forexApiConfig) {
         this.exRateRepository = exRateRepository;
         this.restClient = restClient;
         this.forexApiConfig = forexApiConfig;
@@ -108,7 +111,7 @@ public class ExRateServiceImpl implements ExRateService {
     @Override
     public BigDecimal convert(String from, String to, BigDecimal amount) {
         return findExRate(from, to)
-                .orElseThrow(() -> new ObjectNotFoundException("Conversion from " + from + " to " + to + " not possible!"))
+                .orElseThrow(() -> new ApiObjectNotFoundException("Conversion from " + from + " to " + to + " not possible!", from + "~" + to))
                 .multiply(amount);
     }
 }

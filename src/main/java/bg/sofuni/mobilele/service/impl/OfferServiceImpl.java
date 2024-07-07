@@ -7,23 +7,43 @@ import bg.sofuni.mobilele.model.entity.OfferEntity;
 import bg.sofuni.mobilele.repository.OfferRepository;
 import bg.sofuni.mobilele.service.ExRateService;
 import bg.sofuni.mobilele.service.OfferService;
+import bg.sofuni.mobilele.service.exception.ObjectNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 
 import java.util.List;
 
 @Service
 public class OfferServiceImpl implements OfferService {
+    private final Logger LOGGER = LoggerFactory.getLogger(OfferServiceImpl.class);
+    private final RestClient offerRestClient;
     private final OfferRepository offerRepository;
     private final ExRateService exRateService;
 
-    public OfferServiceImpl(OfferRepository offerRepository, ExRateService exRateService) {
+    public OfferServiceImpl(
+            @Qualifier("offersRestClient") RestClient offerRestClient,
+            OfferRepository offerRepository,
+                            ExRateService exRateService) {
+
+        this.offerRestClient = offerRestClient;
         this.offerRepository = offerRepository;
         this.exRateService = exRateService;
     }
 
     @Override
-    public long createOffer(AddOfferDTO addOfferDTO) {
-        return offerRepository.save(map(addOfferDTO)).getId();
+    public void createOffer(AddOfferDTO addOfferDTO) {
+        LOGGER.debug("Creating new offer...");
+
+        offerRestClient
+                .post()
+                .uri("http://localhost:8081/offers")
+                .body(addOfferDTO)
+                .retrieve();
     }
 
     @Override
@@ -33,46 +53,24 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     public OfferDetailsDTO getOfferDetails(Long id) {
-
-        return this.offerRepository
-                .findById(id)
-                .map(this::offerDetailsDTO)
-                .orElseThrow();
+        return offerRestClient
+                .get()
+                .uri("http://localhost:8081/offers/{id}", id)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(OfferDetailsDTO.class);
     }
 
     @Override
     public List<OfferSummaryDTO> getAllOffersSummary() {
-        return offerRepository
-                .findAll()
-                .stream()
-                .map(OfferServiceImpl::offerSummaryDTO)
-                .toList();
+        LOGGER.debug("Get all offers...");
+
+        return offerRestClient
+                .get()
+                .uri("http://localhost:8081/offers")
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>(){});
     }
 
-    private static OfferSummaryDTO offerSummaryDTO(OfferEntity offerEntity) {
-        return new OfferSummaryDTO(offerEntity.getId(),
-                offerEntity.getDescription(),
-                offerEntity.getMileage(),
-                offerEntity.getEngine());
-    }
-
-    private OfferDetailsDTO offerDetailsDTO(OfferEntity offerEntity) {
-        return new OfferDetailsDTO(offerEntity.getId(),
-                offerEntity.getDescription(),
-                offerEntity.getMileage(),
-                offerEntity.getPrice(),
-                offerEntity.getEngine(),
-                exRateService.allSupportedCurrencies());
-    }
-
-    private static OfferEntity map(AddOfferDTO addOfferDTO) {
-
-        OfferEntity offerEntity = new OfferEntity();
-        offerEntity.setDescription(addOfferDTO.description());
-        offerEntity.setEngine(addOfferDTO.engineType());
-        offerEntity.setMileage(addOfferDTO.mileage());
-        offerEntity.setPrice(addOfferDTO.price());
-
-        return offerEntity;
-    }
 }
