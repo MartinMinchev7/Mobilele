@@ -7,8 +7,8 @@ import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
 public record AddOfferDTO(
-        @NotEmpty(message = "{add.offer.description.not.empty}")
-        @Size(message = "Description must be between 5 and 500 symbols", min = 5, max = 500)
+        @NotNull(message = "{add.offer.description.not.length}")
+        @Size(message = "{add.offer.description.not.length}", min = 5, max = 500)
         String description,
         @NotNull
         @PositiveOrZero
