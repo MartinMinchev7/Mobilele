@@ -31,6 +31,7 @@ public class MobileleUserDetailsService implements UserDetailsService {
 
     private static UserDetails map(UserEntity userEntity) {
         return new MobileleUserDetails(
+                userEntity.getUuid(),  // UUID instead of email for security reasons
                 userEntity.getEmail(),
                 userEntity.getPassword(),
                 userEntity.getRoles().stream().map(UserRoleEntity::getRole).map(MobileleUserDetailsService::map).toList(),

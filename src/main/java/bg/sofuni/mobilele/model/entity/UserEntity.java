@@ -16,7 +16,7 @@ public class UserEntity extends BaseEntity {
     @Column(unique = true)
     private String email;
 
-    @UUIDSequence
+    @UUIDSequence //@UuidGenerator works as well
     @JdbcTypeCode(VARCHAR)
     private UUID uuid;
 
@@ -69,6 +69,14 @@ public class UserEntity extends BaseEntity {
 
     public List<UserRoleEntity> getRoles() {
         return roles;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
     public void setRoles(List<UserRoleEntity> roles) {

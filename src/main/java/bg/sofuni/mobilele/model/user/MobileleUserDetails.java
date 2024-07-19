@@ -4,12 +4,15 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
 import java.util.Collection;
+import java.util.UUID;
 
 public class MobileleUserDetails extends User {
+    private final UUID uuid;
     private final String firstName;
     private final String lastName;
 
     public MobileleUserDetails(
+            UUID uuid,
             String username,
             String password,
             Collection<? extends GrantedAuthority> authorities,
@@ -18,8 +21,13 @@ public class MobileleUserDetails extends User {
     ) {
 
         super(username, password, authorities);
+        this.uuid = uuid;
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public UUID getUuid() {
+        return uuid;
     }
 
     public String getFirstName() {
