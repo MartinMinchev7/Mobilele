@@ -3,6 +3,7 @@ package bg.sofuni.mobilele.web;
 import bg.sofuni.mobilele.model.dto.ConversionResultDTO;
 import bg.sofuni.mobilele.service.ExRateService;
 import bg.sofuni.mobilele.service.exception.ApiObjectNotFoundException;
+import bg.sofuni.mobilele.web.aop.WarnIfExecutionExceed;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,9 @@ public class CurrencyController {
         this.exRateService = exRateService;
     }
 
+    @WarnIfExecutionExceed(
+            threshold = 800
+    )
     @GetMapping("/api/convert")
     public ResponseEntity<ConversionResultDTO> convert(
             @RequestParam("from") String from,

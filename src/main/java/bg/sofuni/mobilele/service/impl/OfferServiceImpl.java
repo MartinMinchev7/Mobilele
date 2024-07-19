@@ -7,7 +7,6 @@ import bg.sofuni.mobilele.model.entity.OfferEntity;
 import bg.sofuni.mobilele.repository.OfferRepository;
 import bg.sofuni.mobilele.service.ExRateService;
 import bg.sofuni.mobilele.service.OfferService;
-import bg.sofuni.mobilele.service.exception.ObjectNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;

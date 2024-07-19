@@ -1,9 +1,13 @@
 package bg.sofuni.mobilele.model.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
+import static java.sql.Types.VARCHAR;
 
 @Entity
 @Table(name = "users")
@@ -11,6 +15,10 @@ public class UserEntity extends BaseEntity {
 
     @Column(unique = true)
     private String email;
+
+    @UUIDSequence
+    @JdbcTypeCode(VARCHAR)
+    private UUID uuid;
 
     private String password;
 
